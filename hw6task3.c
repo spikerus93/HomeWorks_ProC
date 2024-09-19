@@ -1,7 +1,7 @@
 /*
-Задание 2. Сумма всех элементов
+Задание 3. Разница между элементами
 
-Напишите программу, которая возвращает сумму всех элементов в дереве.*/
+Напишите программу, которая находит разницу между максимальным и минимальным элементом в дереве.*/
 
 #include <stdio.h>
 
@@ -13,23 +13,22 @@ typedef struct tree
     struct tree *left, *right, *parent;
 } tree;
 
-void sum_tree(tree *root, tree *element)
+void max_min(tree *root, tree *element)
 {
-    static int sum = 0;
+    static int min = 10000;
+    static int max = 0;
 
     if (root == NULL)
         return;
-    sum += root->key;
+    max = min < root->key ? root->key : max;
+    min = min > root->key ? root->key : min;
 
     if (root->left)
-        sum_tree(root->left, element);
+        max_min(root->left, element);
     if (root->right)
-        sum_tree(root->right, element);
+        max_min(root->right, element);
     if (element == root)
-    {
-        printf("%d\n", sum);
-        sum = 0;
-    }
+        printf("%d", max - min);
 }
 
 int main()
@@ -70,7 +69,7 @@ int main()
     t[8].key = 6;
     t[8].parent = t + 4;
 
-    sum_tree(t, t);
+    max_min(t, t);
 
     return 0;
 }
